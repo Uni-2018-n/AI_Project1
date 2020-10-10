@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-# 
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -92,7 +92,32 @@ def depthFirstSearch(problem):
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    print("Start:", problem.getStartState())
+    print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
+    print("Start's successors:", problem.getSuccessors(problem.getStartState()))
+
+    from game import Directions
+    s = Directions.SOUTH
+    w = Directions.WEST
+    directions_temp= {'South': Directions.SOUTH, 'West': Directions.WEST, 'North': Directions.NORTH, 'East': Directions.EAST}
+    visited = []
+    path = []
+    fringe = util.Queue()
+    fringe.push(problem.getStartState())
+    while not fringe.isEmpty():
+        node = fringe.pop()
+        visited.append(node)
+        if problem.isGoalState(node):
+            break
+        temp = problem.getSuccessors(node)
+        for i in temp:
+            if(i[0] not in visited):
+                fringe.push(i[0])
+                path.append(i[1])
+    print("done")
+    print(path)
+    return []
+    #util.raiseNotDefined()
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
