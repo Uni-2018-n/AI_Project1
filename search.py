@@ -93,6 +93,8 @@ def depthFirstSearch(problem):
     relationships = {}
     while not fringe.isEmpty():
         node = fringe.pop()
+        if node in visited:
+            continue
         visited.append(node)
         if problem.isGoalState(node):
             break
@@ -115,47 +117,32 @@ def depthFirstSearch(problem):
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-
     visited = []
-    path = []
     fringe = util.Queue()
-    fringe.push((problem.getStartState(), problem.getStartState()))
+    fringe.push(problem.getStartState())
+    relationships = {}
     while not fringe.isEmpty():
         node = fringe.pop()
-        visited.append(node)
-        if problem.isGoalState(node[0]):
-            break
-        temp = problem.getSuccessors(node[0])
-        for i in temp:
-            if((i[0],node[0]) not in visited):
-                fringe.push((i[0], node[0]))
-
-    path= []
-    path.append(node)
-    while node[0] != problem.getStartState():
-        for i in range(len(visited)):
-            if node[1] == visited[i][0]:
-                node = visited[i]
-                break;
-        while visited.pop() != node:
+        if node in visited:
             continue
-        path.append(node)
+        visited.append(node)
+        if problem.isGoalState(node):
+            break
+        for child in problem.getSuccessors(node):
+            if child[0] not in visited:
+                fringe.push(child[0])
+                if child[0] not in relationships.keys():
+                    relationships[child[0]] = (node, child[1])
+
+    #node == goal
+    path = []
+    while node != problem.getStartState():
+        path.append(relationships[node][1])
+        node = relationships[node][0]
 
     path.reverse()
-    fin = []
-    node = problem.getStartState()
-    for i in path:
-        if i[0] == node:
-            continue
-        successors = problem.getSuccessors(node)
-        for t in successors:
-            if i[0] == t[0]:
-                node = t[0]
-                fin.append(t[1])
-                break
-
-    print("done")
-    return fin
+    #print(path)
+    return path
     #util.raiseNotDefined()
 
 def uniformCostSearch(problem):
