@@ -87,7 +87,33 @@ def depthFirstSearch(problem):
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    print("Start:", problem.getStartState())
+    print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
+    print("Start's successors:", problem.getSuccessors(problem.getStartState()))
+    visited = []
+    fringe = util.Stack()
+    fringe.push(problem.getStartState())
+    relationships = {}
+    while not fringe.isEmpty():
+        node = fringe.pop()
+        visited.append(node)
+        if problem.isGoalState(node):
+            break
+        for child in problem.getSuccessors(node):
+            if child[0] not in visited:
+                fringe.push(child[0])
+                relationships[child[0]] = (node, child[1])
+
+    #node == goal
+    path = []
+    while node != problem.getStartState():
+        path.append(relationships[node][1])
+        node = relationships[node][0]
+
+    path.reverse()
+    #print(path)
+    return path
+    #util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
@@ -96,27 +122,46 @@ def breadthFirstSearch(problem):
     print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
 
-    from game import Directions
-    s = Directions.SOUTH
-    w = Directions.WEST
-    directions_temp= {'South': Directions.SOUTH, 'West': Directions.WEST, 'North': Directions.NORTH, 'East': Directions.EAST}
     visited = []
     path = []
     fringe = util.Queue()
-    fringe.push(problem.getStartState())
+    fringe.push((problem.getStartState(), problem.getStartState()))
     while not fringe.isEmpty():
         node = fringe.pop()
         visited.append(node)
-        if problem.isGoalState(node):
+        if problem.isGoalState(node[0]):
             break
-        temp = problem.getSuccessors(node)
+        temp = problem.getSuccessors(node[0])
         for i in temp:
-            if(i[0] not in visited):
-                fringe.push(i[0])
-                path.append(i[1])
+            if((i[0],node[0]) not in visited):
+                fringe.push((i[0], node[0]))
+
+    path= []
+    path.append(node)
+    while node[0] != problem.getStartState():
+        for i in range(len(visited)):
+            if node[1] == visited[i][0]:
+                node = visited[i]
+                break;
+        while visited.pop() != node:
+            continue
+        path.append(node)
+
+    path.reverse()
+    fin = []
+    node = problem.getStartState()
+    for i in path:
+        if i[0] == node:
+            continue
+        successors = problem.getSuccessors(node)
+        for t in successors:
+            if i[0] == t[0]:
+                node = t[0]
+                fin.append(t[1])
+                break
+
     print("done")
-    print(path)
-    return []
+    return fin
     #util.raiseNotDefined()
 
 def uniformCostSearch(problem):
