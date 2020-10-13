@@ -189,7 +189,36 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    visited = []
+    fringe = util.PriorityQueue()
+    fringe.push(problem.getStartState(), heuristic(problem.getStartState(), problem))
+    relationships = {}
+    relationships[problem.getStartState()] = (problem.getStartState(), problem.getStartState(), heuristic(problem.getStartState(), problem))
+    while not fringe.isEmpty():
+        node = fringe.pop()
+        if node in visited:
+            continue
+        visited.append(node)
+        if problem.isGoalState(node):
+            break
+        for child in problem.getSuccessors(node):
+            if child[0] not in visited:
+                fringe.push(child[0], relationships[node][2] + child[2] + heuristic(child[0], problem))
+                if child[0] not in relationships.keys():
+                    relationships[child[0]] = (node, child[1], relationships[node][2]+child[2])
+                else:
+                    if relationships[child[0]][2] > relationships[node][2]+child[2]:
+                        relationships[child[0]] = (node, child[1], relationships[node][2]+child[2])
+    #node == goal
+    path = []
+    while node != problem.getStartState():
+        path.append(relationships[node][1])
+        node = relationships[node][0]
+
+    path.reverse()
+    #print(path)
+    return path
+    #util.raiseNotDefined()
 
 
 # Abbreviations
