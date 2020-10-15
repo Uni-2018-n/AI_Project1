@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-# 
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -295,14 +295,16 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return (self.startingPosition, self.corners)
+        #util.raiseNotDefined()
 
     def isGoalState(self, state):
         """
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return len(state[1]) == 0
+        #util.raiseNotDefined()
 
     def getSuccessors(self, state):
         """
@@ -325,6 +327,22 @@ class CornersProblem(search.SearchProblem):
             #   hitsWall = self.walls[nextx][nexty]
 
             "*** YOUR CODE HERE ***"
+            x,y = state[0]
+            dx, dy = Actions.directionToVector(action)
+            nextx, nexty = int(x + dx), int(y + dy)
+            hitsWall = self.walls[nextx][nexty]
+            curr_corners = state[1]
+            if not hitsWall:
+                temp = list(curr_corners) #make it a list so we can use .remove() easily
+                if (nextx, nexty) in temp: #search if its a new corner
+                    temp.remove((nextx, nexty)) #if yes remove it from list cause we found it
+                    next_state = ((nextx, nexty), tuple(temp)) #make it a tuple so it works with search.py functions
+                else: #else its just a possition(not corner)
+                    next_state = ((nextx, nexty), tuple(temp)) #so no need to remove anything
+                successors.append((next_state, action, 1))
+
+        #tried to set state[1] (curr_corners) as list from the getStartState so we wont have to do the extra functions(from tuple to list to tuple again)
+        #but it returned "unhashable type: 'list'" at search.py function and i couldnt edit the function so i just done it that way
 
         self._expanded += 1 # DO NOT CHANGE
         return successors
