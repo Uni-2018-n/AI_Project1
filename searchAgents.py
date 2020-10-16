@@ -378,6 +378,21 @@ def cornersHeuristic(state, problem):
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
     "*** YOUR CODE HERE ***"
+    temp = []
+    if(len(state[1]) != 0):
+        for corner in state[1]:
+            temp.append(abs(state[0][0] - corner[0]) + abs(state[0][1] - corner[1])) #manhattan value (from manhattanHeuristic function)
+            # temp.append(int(int((state[0][0] - corner[0])) ** 2 + int((state[0][1] - corner[1])) ** 2) ** 0.5) #euclidean value (from euclideanHeuristic function)
+        return max(temp)
+
+        # x=0
+        # for i in temp:
+        #     x = x + i
+        # return x/len(temp)
+
+        #I checked average value, minimum, maximum for every equation but the best was manhattan with maximum value.(1136 nodes)
+        #next best was euclidean with maximum value (1241 nodes)
+
     return 0 # Default to trivial solution
 
 class AStarCornersAgent(SearchAgent):
