@@ -289,6 +289,7 @@ class CornersProblem(search.SearchProblem):
         # in initializing the problem
         "*** YOUR CODE HERE ***"
 
+
     def getStartState(self):
         """
         Returns the start state (in your state space, not the full Pacman state
@@ -487,6 +488,15 @@ def foodHeuristic(state, problem):
     """
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
+    max = 0
+    foods= foodGrid.asList()
+    if(len(foods) != 0):
+        for item in foods[:2]:#skeftika oti den yparxei periptosh na pame se makrinotera apo ta 2 foods alla telika den einai giayto epeidh den jerei to poy einai o pacman, doyleyei
+            #temp = abs(position[0] - item[0]) + abs(position[1] - item[1])
+            temp =mazeDistance(position, item, problem.startingGameState)
+            if temp > max:
+                max = temp
+        return max
     return 0
 
 class ClosestDotSearchAgent(SearchAgent):
