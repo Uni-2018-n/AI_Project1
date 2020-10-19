@@ -492,7 +492,7 @@ def foodHeuristic(state, problem):
     foods= foodGrid.asList()
     if(len(foods) != 0):
         for item in foods[:2]:#skeftika oti den yparxei periptosh na pame se makrinotera apo ta 2 foods alla telika den einai giayto epeidh den jerei to poy einai o pacman, doyleyei
-            #temp = abs(position[0] - item[0]) + abs(position[1] - item[1])
+            #temp = abs(position[0] - item[0]) + abs(position[1] - item[1]) #gave up at manhattan but then searched the code and found this
             temp =mazeDistance(position, item, problem.startingGameState)
             if temp > max:
                 max = temp
@@ -528,7 +528,10 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return search.breadthFirstSearch(problem) #o dfs xrisimopoioyse parapano komboys kai ekane la8os bimata
+                                                  #o dfs paei sto ba8itero kai meta pros ta pisw enw o bfs kanei olo to
+                                                  #depth prota kai meta 
+        # util.raiseNotDefined()
 
 class AnyFoodSearchProblem(PositionSearchProblem):
     """
@@ -564,6 +567,8 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         x,y = state
 
         "*** YOUR CODE HERE ***"
+        return (x,y) in self.food.asList() #me thn ennoia oti o protos kombos poy o search 8a dei einai o pio konta
+                                            #ara as paei se ayton
         util.raiseNotDefined()
 
 def mazeDistance(point1, point2, gameState):
