@@ -87,29 +87,29 @@ def depthFirstSearch(problem):
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
     "*** YOUR CODE HERE ***"
-    visited = []
-    fringe = util.Stack()
-    fringe.push(problem.getStartState())
-    relationships = {}
+    visited = [] #used to store the visited nodes
+    fringe = util.Stack() #stack because we are building DFS
+    fringe.push(problem.getStartState()) #initialize fringe
+    relationships = {} #dictionary to store the relationships with the node and the child so we can back trace the path
     while not fringe.isEmpty():
-        node = fringe.pop()
-        if node in visited:
+        node = fringe.pop() #pop it
+        if node in visited: #check if we already visited(so we wont do circles)
             continue
-        visited.append(node)
-        if problem.isGoalState(node):
-            break
-        for child in problem.getSuccessors(node):
-            if child[0] not in visited:
-                fringe.push(child[0])
-                relationships[child[0]] = (node, child[1])
+        visited.append(node) #if not add it to visited so we wont revisit it
+        if problem.isGoalState(node): # check if its the goal
+            break #if yes then node found, time to backtrace the path
+        for child in problem.getSuccessors(node): # if not we need to get all the successors
+            if child[0] not in visited: # that are not into visited
+                fringe.push(child[0]) #and add them to the stack so we can run the algorithm with them
+                relationships[child[0]] = (node, child[1]) #and finally add the relationship to the dictionary so we have a (more precise) view of who is next to who
 
     #node == goal
-    path = []
-    while node != problem.getStartState():
-        path.append(relationships[node][1])
-        node = relationships[node][0]
+    path = [] #initialize final list
+    while node != problem.getStartState(): # now we need to go from the goal to the start state via the relationship dictionary
+        path.append(relationships[node][1]) #add the node to the path
+        node = relationships[node][0] #and now set as new node the node's child so we can run it as "parent"
 
-    path.reverse()
+    path.reverse() #because we go from goal to start we need to reverse it
     #print(path)
     return path
     #util.raiseNotDefined()
@@ -118,7 +118,7 @@ def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
     visited = []
-    fringe = util.Queue()
+    fringe = util.Queue() #same logic but with queue cause we use BFS
     fringe.push(problem.getStartState())
     relationships = {}
     while not fringe.isEmpty():
@@ -131,7 +131,7 @@ def breadthFirstSearch(problem):
         for child in problem.getSuccessors(node):
             if child[0] not in visited:
                 fringe.push(child[0])
-                if child[0] not in relationships.keys():
+                if child[0] not in relationships.keys(): #added this because sometimes the "next step" has a successor same as the prev step
                     relationships[child[0]] = (node, child[1])
 
     #node == goal
