@@ -149,9 +149,9 @@ def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
     visited = []
-    fringe = util.PriorityQueue()
+    fringe = util.PriorityQueue() #use priorityqueue because now we need to get the lowest-cost node
     fringe.push(problem.getStartState(), 0)
-    relationships = {}
+    relationships = {} #now we got the node we are in, the child and the cost to go to the node plus the cost to go from the node to the child
     relationships[problem.getStartState()] = (problem.getStartState(), problem.getStartState(), 0)
     while not fringe.isEmpty():
         node = fringe.pop()
@@ -163,11 +163,11 @@ def uniformCostSearch(problem):
         for child in problem.getSuccessors(node):
             if child[0] not in visited:
                 fringe.push(child[0], relationships[node][2] + child[2])
-                if child[0] not in relationships.keys():
+                if child[0] not in relationships.keys(): #if its not add it to the dictionary
                     relationships[child[0]] = (node, child[1], relationships[node][2]+child[2])
-                else:
-                    if relationships[child[0]][2] > relationships[node][2]+child[2]:
-                        relationships[child[0]] = (node, child[1], relationships[node][2]+child[2])
+                else: #if its in the dictionary
+                    if relationships[child[0]][2] > relationships[node][2]+child[2]: #check if the cost to go to the child is grater than the cost we have now
+                        relationships[child[0]] = (node, child[1], relationships[node][2]+child[2]) #if yes replace it as it is a better path(with lower cost)
     #node == goal
     path = []
     while node != problem.getStartState():
@@ -190,8 +190,8 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
     visited = []
-    fringe = util.PriorityQueue()
-    fringe.push(problem.getStartState(), heuristic(problem.getStartState(), problem))
+    fringe = util.PriorityQueue()#similar with ucs but we add the heuristic function
+    fringe.push(problem.getStartState(), heuristic(problem.getStartState(), problem)) #for example here the cost is 0+h(start)
     relationships = {}
     relationships[problem.getStartState()] = (problem.getStartState(), problem.getStartState(), heuristic(problem.getStartState(), problem))
     while not fringe.isEmpty():
@@ -203,9 +203,9 @@ def aStarSearch(problem, heuristic=nullHeuristic):
             break
         for child in problem.getSuccessors(node):
             if child[0] not in visited:
-                fringe.push(child[0], relationships[node][2] + child[2] + heuristic(child[0], problem))
+                fringe.push(child[0], relationships[node][2] + child[2] + heuristic(child[0], problem)) #and here is the cost to go to the node we are in + the cost to go from the node to the child + the h(child)
                 if child[0] not in relationships.keys():
-                    relationships[child[0]] = (node, child[1], relationships[node][2]+child[2])
+                    relationships[child[0]] = (node, child[1], relationships[node][2]+child[2]) #adding it to the dictionary its not nessasary though because we already use the h() inside the priorityqueue
                 else:
                     if relationships[child[0]][2] > relationships[node][2]+child[2]:
                         relationships[child[0]] = (node, child[1], relationships[node][2]+child[2])
