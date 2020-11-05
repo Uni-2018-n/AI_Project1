@@ -490,7 +490,7 @@ def foodHeuristic(state, problem):
     "*** YOUR CODE HERE ***"
     max = 0
     foods= foodGrid.asList()
-    if(len(foods) != 0): #i thought it that there is no way to go further than 2 "states" away to eat the food so i did it, but after more thinking the heuristic dont know were the packman is but it works
+    if(len(foods) != 0): #i thought it that there is no way to go further than 3 "states" away to eat the food so i did it, but after more thinking the heuristic dont know were the packman is but it works
         for item in foods[:2]:
             #temp = abs(position[0] - item[0]) + abs(position[1] - item[1]) #gave up at manhattan but then searched the code and found this
             temp =mazeDistance(position, item, problem.startingGameState) #its a bit more computer power consuming but its the fastest for your case
